@@ -19,3 +19,5 @@ print(playerName)
 let managerName = "Michael Scott"
 let dogBreed = "Samoyed"
 let meaningOfLife = "How many roads must a man walk down?"
+
+var age = 3
