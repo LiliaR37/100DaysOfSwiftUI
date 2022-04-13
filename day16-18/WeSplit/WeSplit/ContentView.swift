@@ -27,6 +27,17 @@ struct ContentView: View {
      
     }
     
+    //challenge task
+    var totalValue:Double {
+        let tipSelected = Double(tipPercentage)
+        
+        let tipValueTotal = checkAmount / 100 * tipSelected
+        
+        let total =  checkAmount + tipValueTotal
+        return total
+        
+    }
+    
     @FocusState private var amountIsFocused: Bool
     
     var body: some View {
@@ -38,6 +49,8 @@ struct ContentView: View {
                         .focused($amountIsFocused)
                   
                     Picker("Number of people", selection: $numberOfPeople) {
+                        
+                        //challenge task
                         ForEach(2 ..< 100) {
                             Text("\($0) people")
                         }
@@ -47,17 +60,27 @@ struct ContentView: View {
                 }
                 Section {
                     Picker("Tip percentage", selection: $tipPercentage) {
-                        ForEach(tipPercentages, id: \.self) {
-                            Text($0, format: .percent)
+                        
+                        ForEach(0 ..< 101 ) {
+                            Text("\($0)%")
                         }
                     }
-                    .pickerStyle(.segmented)
+                   
                 }header: {
                     Text("How much tip do you want to leave?")
                 }
                 
                 Section {
                     Text(totalPerPerson, format: .currency(code: Locale.current.currencyCode ?? "USD"))
+                }header: {
+                    Text("Amount per person")
+                }
+                
+                Section {
+                    Text(totalValue, format: .currency(code: Locale.current.currencyCode ?? "USD"))
+                }header: {
+                    //challenge task
+                    Text("Total amount")
                 }
             }
             .navigationTitle("WeSplit")
