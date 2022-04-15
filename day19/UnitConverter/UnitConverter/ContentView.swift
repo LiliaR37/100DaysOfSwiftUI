@@ -9,28 +9,21 @@ import SwiftUI
 
 struct ContentView: View {
     @State var textFieldInput: Double = 0
-    @State var texfieldOutput: Double = 0
-    @State var inputUnitSelection = ""
-    @State var outputUnitSelection = ""
+    @State var inputUnitSelection = UnitTemperature.celsius
+    @State var outputUnitSelection =  UnitTemperature.fahrenheit
     
-    let units: [String] = ["Celcius", "Farenheit","Kelvins"]
+    let units: [UnitTemperature] = [.celsius, .fahrenheit, .kelvin]
     
     @FocusState private var amountIsFocused: Bool
     
-    var inputCalculation: Double {
+    var outputCalculation: Double {
         
-        
-        if outputUnitSelection == "Farenheit" {
-            let farenheit = (textFieldInput * 1.8 ) + 32
-            return farenheit
-            
-        } else if outputUnitSelection == "Kelvins" {
-            let kelvins = (textFieldInput + 273.15)
-           return kelvins
-        } else {
-            return 0
-        }
+       let inputM = Measurement(value:textFieldInput, unit: inputUnitSelection)
     
+        let outputM = inputM.converted(to: outputUnitSelection)
+        
+        return outputM.value
+      
         
     }
    
@@ -49,7 +42,7 @@ struct ContentView: View {
                 Section {
                     Picker("Select: ", selection: $inputUnitSelection) {
                         ForEach(units, id: \.self) {
-                            Text("\($0)")
+                            Text($0.symbol)
                         }
                        
                         
@@ -62,7 +55,7 @@ struct ContentView: View {
                 Section {
                     Picker("Selection", selection: $outputUnitSelection) {
                         ForEach(units, id: \.self) {
-                            Text("\($0)")
+                            Text($0.symbol)
                                
                         }
                         
@@ -73,7 +66,7 @@ struct ContentView: View {
                 }
                 
                 Section{
-                    Text( inputCalculation,  format: .number)
+                    Text(outputCalculation,  format: .number)
                 }
                 
                 
