@@ -15,13 +15,18 @@ struct ContentView: View {
     
     @State private var showingScore = false
     @State private var scoreTitle = ""
+    @State private var score = 0
+let questions = 8
+    @State private var currentquestion = 0
+    
+    @State private var showingReset = false
     
     var body: some View {
         
         ZStack {
             RadialGradient(stops: [
-                .init(color: .blue, location: 0.3),
-                .init(color: .red, location: 0.3),
+                .init(color: .purple, location: 0.3),
+                .init(color: .pink, location: 0.3),
             ], center: .top, startRadius: 200, endRadius: 700)
                 .ignoresSafeArea()
             VStack {
@@ -61,9 +66,16 @@ struct ContentView: View {
                 Spacer()
                 Spacer()
                 
-                Text("Score: ???")
-                    .foregroundColor(.white)
-                    .font(.title.bold())
+                HStack (spacing: 80){
+                    
+                    Text("Question:  \(currentquestion)" )
+                    Text("Score: \(score)" )
+        
+                     
+                }
+                .foregroundColor(.white)
+            .font(.title.bold())
+                
                 
                 Spacer()
             }
@@ -73,22 +85,60 @@ struct ContentView: View {
         .alert(scoreTitle, isPresented: $showingScore) {
             Button("Continue", action: askQuestion)
         } message: {
-            Text("Your score is ???")
+            Text("Your score is \(score)")
+        }
+        
+        .alert("Do you want to start again?", isPresented: $showingReset) {
+            Button("Reset", action: reset)
+        } message: {
+            Text("Your final escore is:  \(score)")
         }
     }
     func flagTapped(_ number: Int) {
         if number == correctAnswer {
             scoreTitle = "Correct"
+            score += 1
         } else {
-            scoreTitle = "Wrong"
+        
+            scoreTitle = "Wrong! That’s the flag of \(countries[number]) "
+            
         }
-
+        
+        currentquestion += 1
         showingScore = true
+        
+       
+        if currentquestion == questions {
+            showingReset = true
+            
+        }
+      
+        
+        
     }
     func askQuestion() {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
     }
+    
+ 
+    func reset() {
+        score = 0
+        currentquestion = 0
+        showingScore = false
+        
+    
+      
+        
+    
+        
+        
+       
+    }
+    
+  
+    
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
