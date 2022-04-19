@@ -16,10 +16,24 @@ struct ContentView: View {
     @State private var showingScore = false
     @State private var scoreTitle = ""
     @State private var score = 0
-let questions = 8
+    let questions = 8
     @State private var currentquestion = 0
     
     @State private var showingReset = false
+    
+    //ViewModifier
+    struct FlagView: View {
+        var flag: String
+        var body: some View {
+            Image(flag)
+                .renderingMode(.original)
+                .clipShape(Capsule())
+                .shadow(radius: 5)
+            
+        }
+        
+    }
+    
     
     var body: some View {
         
@@ -33,8 +47,8 @@ let questions = 8
                 Spacer()
                 Text("Guess the Flag")
                     .font(.largeTitle.bold())
-                      .foregroundColor(.white)
-                      
+                    .foregroundColor(.white)
+                
                 VStack (spacing: 15) {
                     VStack {
                         Text("Tap the flag of")
@@ -51,17 +65,18 @@ let questions = 8
                             // flag was tapped
                             flagTapped(number)
                         } label: {
-                            Image(countries[number])
-                                .renderingMode(.original)
-                                .clipShape(Capsule())
-                                .shadow(radius: 5)
+                            FlagView(flag: self.countries[number])
+                            //                            Image(countries[number])
+                            //                                .renderingMode(.original)
+                            //                                .clipShape(Capsule())
+                            //                                .shadow(radius: 5)
                         }
                     }
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 20)
                 .background(.regularMaterial)
-            .clipShape(RoundedRectangle(cornerRadius: 20))
+                .clipShape(RoundedRectangle(cornerRadius: 20))
                 
                 Spacer()
                 Spacer()
@@ -70,17 +85,17 @@ let questions = 8
                     
                     Text("Question:  \(currentquestion)" )
                     Text("Score: \(score)" )
-        
-                     
+                    
+                    
                 }
                 .foregroundColor(.white)
-            .font(.title.bold())
+                .font(.title.bold())
                 
                 
                 Spacer()
             }
             .padding()
-          
+            
         }
         .alert(scoreTitle, isPresented: $showingScore) {
             Button("Continue", action: askQuestion)
@@ -99,7 +114,7 @@ let questions = 8
             scoreTitle = "Correct"
             score += 1
         } else {
-        
+            
             scoreTitle = "Wrong! That’s the flag of \(countries[number]) "
             
         }
@@ -107,12 +122,12 @@ let questions = 8
         currentquestion += 1
         showingScore = true
         
-       
+        
         if currentquestion == questions {
             showingReset = true
             
         }
-      
+        
         
         
     }
@@ -121,22 +136,16 @@ let questions = 8
         correctAnswer = Int.random(in: 0...2)
     }
     
- 
+    
     func reset() {
         score = 0
         currentquestion = 0
         showingScore = false
         
-    
-      
         
-    
-        
-        
-       
     }
     
-  
+    
     
     
 }
