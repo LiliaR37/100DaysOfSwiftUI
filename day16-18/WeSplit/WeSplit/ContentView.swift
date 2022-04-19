@@ -14,6 +14,8 @@ struct ContentView: View {
     
     let tipPercentages = [10, 15, 20, 25, 0]
     
+
+    
     var totalPerPerson: Double {
         // calculate the total per person
         let peopleCount = Double(numberOfPeople + 2)
@@ -36,6 +38,7 @@ struct ContentView: View {
         let total =  checkAmount + tipValueTotal
         return total
         
+      
     }
     
     @FocusState private var amountIsFocused: Bool
@@ -64,6 +67,9 @@ struct ContentView: View {
                         
                         ForEach(0 ..< 101 ) {
                             Text("\($0)%")
+                        
+                            
+                            
                         }
                     }
                    
@@ -79,9 +85,12 @@ struct ContentView: View {
                 
                 Section {
                     Text(totalValue, format: .currency(code: Locale.current.currencyCode ?? "USD"))
+                    //challenge day 24
+                        .foregroundColor(tipPercentage == 0 ? .red : .black)
                 }header: {
                     //challenge task
                     Text("Total amount")
+                 
                 }
             }
             .navigationTitle("WeSplit")
@@ -97,6 +106,8 @@ struct ContentView: View {
             }
         }
     }
+    
+   
 }
 
 struct ContentView_Previews: PreviewProvider {
