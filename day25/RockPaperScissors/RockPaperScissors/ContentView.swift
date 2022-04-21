@@ -13,7 +13,6 @@ struct ContentView: View {
     
     @State private var moves = ["rock", "paper", "scissors"]
     
-    @State private var winningMoves = ["paper", "scissors", "rock"]
     
     @State private  var  result  = Bool.random()
     @State private var randomMove = Int.random(in:0..<3)
