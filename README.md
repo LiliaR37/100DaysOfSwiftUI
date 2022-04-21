@@ -8,3 +8,4 @@ This repository contains notes, projects and challenges from [100DaysOfSwiftUI](
 
 ## Project 2: [GuessTheFlag](https://github.com/LiliaR37/100DaysOfSwiftUI/tree/main/day20-22/GuessTheFlag/GuessTheFlag) Day 20-22
 
+## Project 3: [Views and Modifiers](https://github.com/LiliaR37/100DaysOfSwiftUI/tree/main/day23-24/ViewsAndModifiers/ViewsAndModifiers) Day 23-24
