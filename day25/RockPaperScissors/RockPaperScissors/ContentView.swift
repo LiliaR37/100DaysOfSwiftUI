@@ -22,7 +22,6 @@ struct ContentView: View {
     @State private var showingAlert = false
     
     
-    
     var body: some View {
         ZStack {
             backgroundColor
@@ -51,8 +50,10 @@ struct ContentView: View {
                         Text("App choice: ")
                             .font(.title2)
                         
-                        
-                        Image("\(moves[randomMove])")
+                        withAnimation {
+                            Image("\(moves[randomMove])")
+                        }
+                     
                         
                         
                         
