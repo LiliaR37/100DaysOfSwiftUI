@@ -49,7 +49,7 @@ struct ContentView: View {
                     }
                     .pickerStyle(.segmented)
                 } header: {
-                    Text("To : ")
+                    Text("Select input unit : ")
                 }
                 
                 Section {
@@ -62,7 +62,7 @@ struct ContentView: View {
                     }
                     .pickerStyle(.segmented)
                 } header: {
-                    Text("From : ")
+                    Text("Select output unit ")
                 }
                 
                 Section{
