@@ -22,33 +22,49 @@ struct ContentView: View {
     @State private var errorMessage = ""
     @State private var showingError = false
     
+    @State private var score = 0
+    
     var body: some View {
         NavigationView {
-            List {
-                
-                Section {
-                    TextField("Enter your word", text: $newWord)
-                        .autocapitalization(.none)
-                }
-                Section {
-                    ForEach(usedWords, id: \.self) { word in
-                        HStack {
-                            Image(systemName: "\(word.count).circle")
-                            Text(word)
-                        }
-                    }
-                    }
+            VStack {
+                List {
                     
-                }
-            .navigationTitle(rootWord)
+                    Section {
+                        TextField("Enter your word", text: $newWord)
+                            .autocapitalization(.none)
+                    }
+                    Section {
+                        ForEach(usedWords, id: \.self) { word in
+                            HStack {
+                                Image(systemName: "\(word.count).circle")
+                                Text(word)
+                            }
+                        }
+                        }
+                        
+                    }
+                .listStyle(GroupedListStyle())
+                .navigationTitle(rootWord)
+                .toolbar {
+                    Button("Restart") {
+                        startGame()
+                        score = 0
+                        usedWords = [String]()
+                    }
             }
-           
-        
+                
+                Text(" Score: \(score)")
+                    .font(.largeTitle)
+                   
+                    
+            }
+            }
+            
             .onSubmit (addNewWord)
         
         //view modifier for running a closure when a view is shown
             .onAppear(perform: startGame)
-        
+         
             .alert(errorTitle, isPresented: $showingError) {
                 Button("OK", role: .cancel) { }
             } message: {
@@ -78,12 +94,25 @@ struct ContentView: View {
             return
         }
         
+        guard isShorter(word: answer) else {
+            wordError(title: "Word not allowed", message: "You can't write  word that are shorter than three letters ")
+            return
+        }
+       
+    
+        
         //Insert that word at position 0 in the usedWords array
         //Set newWord back to be an empty string
         withAnimation {
             usedWords.insert(answer, at: 0)
         }
         newWord = ""
+        
+        //Score
+        if (usedWords.count != 0) {
+            let scoreCount = answer.count
+            score += scoreCount
+        }
     }
     
     func startGame() {
@@ -99,11 +128,15 @@ struct ContentView: View {
 
                 // If we are here everything has worked, so we can exit
                 return
+                
             }
         }
 
         // If were are *here* then there was a problem – trigger a crash and report the error
         fatalError("Could not load start.txt from bundle.")
+        
+       
+        
     }
     
     //the word original (it hasn’t been used already)
@@ -125,6 +158,28 @@ struct ContentView: View {
         return true
     }
     
+    func isShorter(word: String) -> Bool {
+        
+        if word.count <= 3  {
+            return false
+        } else {
+            return true
+        }
+    }
+    
+    func score(word: String) -> Bool {
+        let scoreWord = word.count
+        
+        if scoreWord == word.count {
+            score += scoreWord
+            return true
+        } else {
+            return false
+        }
+        
+    }
+    
+    //UITextChecker
     func isReal(word: String) -> Bool {
         let checker = UITextChecker()
         let range = NSRange(location: 0, length: word.utf16.count)
@@ -133,12 +188,16 @@ struct ContentView: View {
         return misspelledRange.location == NSNotFound
     }
     
+  
+    
     //alert
     func wordError(title: String, message: String) {
         errorTitle = title
         errorMessage = message
         showingError = true
     }
+    
+    
 
 }
 
