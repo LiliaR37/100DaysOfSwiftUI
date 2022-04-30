@@ -20,15 +20,27 @@ struct ContentView: View {
     @State private var currentquestion = 0
     
     @State private var showingReset = false
+    @State private var isCorrect = false
+    @State private var selectedNumber = 0
+    @State private var isOutOpacity = false
+    
+    
+    
+    
+    
     
     //ViewModifier
-    struct FlagView: View {
+struct FlagView: View {
         var flag: String
+        
+        
         var body: some View {
             Image(flag)
                 .renderingMode(.original)
                 .clipShape(Capsule())
                 .shadow(radius: 5)
+            
+            
             
         }
         
@@ -62,10 +74,27 @@ struct ContentView: View {
                     
                     ForEach(0..<3) { number in
                         Button {
-                            // flag was tapped
-                            flagTapped(number)
+                    
+                 
+                            
+                            withAnimation {
+                                // flag was tapped
+                                flagTapped(number)
+                            }
+                            
+                            
+                            
+                            
                         } label: {
                             FlagView(flag: self.countries[number])
+                            //Animation challenge 
+                                .rotation3DEffect(.degrees(isCorrect && selectedNumber == number ? 360 : 0), axis: (x: 0, y: 1, z: 0))
+                                .opacity( isOutOpacity && selectedNumber != number ? 0.25 : 1 )
+                            
+                            
+                            
+                            
+                            
                             //                            Image(countries[number])
                             //                                .renderingMode(.original)
                             //                                .clipShape(Capsule())
@@ -110,17 +139,28 @@ struct ContentView: View {
         }
     }
     func flagTapped(_ number: Int) {
+        self.selectedNumber = number
         if number == correctAnswer {
+            
             scoreTitle = "Correct"
             score += 1
+            isCorrect = true
+            isOutOpacity = true
+            
+            
+            
         } else {
             
             scoreTitle = "Wrong! That’s the flag of \(countries[number]) "
+           
             
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            showingScore = true
         }
         
         currentquestion += 1
-        showingScore = true
+        
         
         
         if currentquestion == questions {
@@ -130,10 +170,19 @@ struct ContentView: View {
         
         
         
+        
     }
     func askQuestion() {
+        
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+        isCorrect = false
+        isOutOpacity = false
+        
+        
+        
+        
+        
     }
     
     
